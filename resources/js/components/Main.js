@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from "react-redux";
 import Cat from "./Cat";
 
-//import { fetchHasLogInHour } from '../actions/user';
+import { fetchCurrentDay } from '../actions/entry';
 
 class Main extends React.Component{
     constructor(){
@@ -10,7 +10,7 @@ class Main extends React.Component{
         //this.handleBtnDelete = this.handleBtnDelete.bind(this);
     }
     componentDidMount(){
-        
+        this.props.dispatch(fetchCurrentDay());
     }
 
     render(){

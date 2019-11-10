@@ -22,6 +22,8 @@ Route::group(['prefix' => 'api'], function() {
     });
 
     Route::post('/login', 'Auth\LoginController@login')->middleware('guest')->name('login');
+    Route::get('/current', 'EntryController@currentDay')->name('current-day');
+    Route::get('/current/log-in', 'EntryController@currentLogIn')->name('current-log-in');
 });
 
 Route::get('/{path?}', function () {

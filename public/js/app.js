@@ -88858,6 +88858,34 @@ var Main = function Main(props) {
 
 /***/ }),
 
+/***/ "./resources/js/actions/entry.js":
+/*!***************************************!*\
+  !*** ./resources/js/actions/entry.js ***!
+  \***************************************/
+/*! exports provided: fetchCurrentDay */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchCurrentDay", function() { return fetchCurrentDay; });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _constants_action_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../constants/action-types */ "./resources/js/constants/action-types.js");
+
+
+function fetchCurrentDay() {
+  return function (dispatch) {
+    axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("api/current").then(function (response) {
+      dispatch({
+        type: _constants_action_types__WEBPACK_IMPORTED_MODULE_1__["FETCH_CURRENT_FULFILLED"],
+        payload: response.data
+      });
+    })["catch"](function (error) {});
+  };
+}
+
+/***/ }),
+
 /***/ "./resources/js/actions/user.js":
 /*!**************************************!*\
   !*** ./resources/js/actions/user.js ***!
@@ -89131,6 +89159,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var _Cat__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Cat */ "./resources/js/components/Cat.js");
+/* harmony import */ var _actions_entry__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../actions/entry */ "./resources/js/actions/entry.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -89151,7 +89180,8 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
- //import { fetchHasLogInHour } from '../actions/user';
+
+
 
 var Main =
 /*#__PURE__*/
@@ -89166,7 +89196,9 @@ function (_React$Component) {
 
   _createClass(Main, [{
     key: "componentDidMount",
-    value: function componentDidMount() {}
+    value: function componentDidMount() {
+      this.props.dispatch(Object(_actions_entry__WEBPACK_IMPORTED_MODULE_4__["fetchCurrentDay"])());
+    }
   }, {
     key: "render",
     value: function render() {
@@ -89613,7 +89645,7 @@ function mapStateToProps(state) {
 /*!************************************************!*\
   !*** ./resources/js/constants/action-types.js ***!
   \************************************************/
-/*! exports provided: ADD_ARTICLE, FETCH_USERS_FULFILLED, FETCH_USERS_REJECTED, FETCH_USER_REJECTED, FETCH_USER_FULFILLED, FETCH_USER_LOGGED */
+/*! exports provided: ADD_ARTICLE, FETCH_USERS_FULFILLED, FETCH_USERS_REJECTED, FETCH_USER_REJECTED, FETCH_USER_FULFILLED, FETCH_USER_LOGGED, FETCH_CURRENT_DAY, FETCH_CURRENT_FULFILLED */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -89624,12 +89656,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_USER_REJECTED", function() { return FETCH_USER_REJECTED; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_USER_FULFILLED", function() { return FETCH_USER_FULFILLED; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_USER_LOGGED", function() { return FETCH_USER_LOGGED; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_CURRENT_DAY", function() { return FETCH_CURRENT_DAY; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_CURRENT_FULFILLED", function() { return FETCH_CURRENT_FULFILLED; });
 var ADD_ARTICLE = "ADD_ARTICLE";
 var FETCH_USERS_FULFILLED = "FETCH_USERS_FULFILLED";
 var FETCH_USERS_REJECTED = "FETCH_USERS_REJECTED";
 var FETCH_USER_REJECTED = "FETCH_USER_REJECTED";
 var FETCH_USER_FULFILLED = "FETCH_USER_FULFILLED";
 var FETCH_USER_LOGGED = "FETCH_USER_LOGGED";
+var FETCH_CURRENT_DAY = "FETCH_CURRENT_DAY";
+var FETCH_CURRENT_FULFILLED = "FETCH_CURRENT_FULFILLED";
 
 /***/ }),
 
