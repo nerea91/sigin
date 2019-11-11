@@ -31,6 +31,7 @@ class Main extends React.Component{
                 }
                 <div className="cat">
                 <Cat /*type="gif"*/ text="Get to work!" />
+                <img id="loader" src="img/loader.gif" />
                 </div>
                 
             </div>

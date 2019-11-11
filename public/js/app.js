@@ -89142,7 +89142,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function Cat(props) {
-  console.log(props);
+  function handleLoad() {
+    setTimeout(function () {
+      $('#loader').fadeOut();
+      setTimeout(function () {
+        $('#cat-img').fadeIn();
+      }, 600);
+    }, 1000);
+  }
+
   var _props$type = props.type,
       type = _props$type === void 0 ? '' : _props$type,
       _props$text = props.text,
@@ -89160,7 +89168,9 @@ function Cat(props) {
   var uniqueNum = Math.random();
   var url = "https://cataas.com/cat/".concat(type, "/says/").concat(text, "?s=").concat(fontSize, "&c=").concat(color, "&filter=").concat(filter, "&width=").concat(width, "&height=").concat(height, "&uniqueNum=").concat(uniqueNum);
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
-    src: url
+    id: "cat-img",
+    src: url,
+    onLoad: handleLoad()
   });
 }
 
@@ -89258,6 +89268,9 @@ function (_React$Component) {
       /*type="gif"*/
       , {
         text: "Get to work!"
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+        id: "loader",
+        src: "img/loader.gif"
       })));
     }
   }]);

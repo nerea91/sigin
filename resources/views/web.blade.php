@@ -23,6 +23,9 @@
                 max-width: 600px;
                 max-height: 500px;
             }
+            #cat-img{
+                display: none;
+            }
         </style>
     </head>
     <body>
