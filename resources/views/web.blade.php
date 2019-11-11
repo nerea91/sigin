@@ -19,6 +19,10 @@
             .cat{
                 margin-top: 1em;
             }
+            .cat img {
+                max-width: 600px;
+                max-height: 500px;
+            }
         </style>
     </head>
     <body>

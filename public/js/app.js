@@ -89754,7 +89754,7 @@ function reducer() {
   };
   var action = arguments.length > 1 ? arguments[1] : undefined;
 
-  if (action.payload) {
+  if (action.payload && action.payload.input) {
     return _objectSpread({}, state, {
       fetched: true,
       input: action.payload.input,

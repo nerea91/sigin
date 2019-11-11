@@ -7,7 +7,7 @@ export default function reducer(state={
     error: null
 }, action){
 
-  if(action.payload) {
+  if(action.payload && action.payload.input) {
     return {
       ...state,
       fetched: true,
