@@ -12,7 +12,7 @@ class Input extends Model
      * @var array
      */
     protected $fillable = [
-        'entry_in', 'entry_out'
+        'entry_in', 'entry_out', 'day_id'
     ];
 
     public function day()

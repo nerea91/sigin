@@ -28,7 +28,7 @@ class EntryController extends Controller
     {
         $now = Carbon::now()->toDateString();
         $day = Day::firstOrCreate(['date' => $now]);
-        return response()->json(['day' => $day]);
+        return response()->json(['input' => $day->inputs->last()]);
     }
   
     /**
@@ -40,8 +40,26 @@ class EntryController extends Controller
     {
         $now = Carbon::now();
         $day = Day::firstOrCreate(['date' => $now->toDateString()]);
-        $day->inputs()->create(['entry_in' => $now->toDateTimeString(), 'input_id' => $day->getKey()]);
-        $day->load('inputs');
-        return response()->json(['day' => $day]);
+        $input = Input::create(['entry_in' => $now->toDateTimeString(), 'day_id' => $day->getKey()]);
+        return response()->json(['input' => $input]);
+    }
+
+    /**
+     * Log out Hour
+     *
+     * @return JSON
+     */
+    public function currentLogOut()
+    {
+        $now = Carbon::now();
+        $day = Day::where(['date' => $now->toDateString()])->first();
+
+        if($day) {
+            $input = $day->inputs->last();
+            $input->entry_out = $now->toDateTimeString();
+            $input->save();
+            return response()->json(['input' => $input]);
+        }
+        return response()->json(['error' => 'Not found'], 404);
     }
 }

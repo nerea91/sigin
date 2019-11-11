@@ -25,6 +25,7 @@ Route::group(['prefix' => 'api'], function() {
     Route::get('/logout', 'Auth\LoginController@logout')->middleware('auth')->name('logout');
     Route::get('/current', 'EntryController@currentDay')->name('current-day');
     Route::get('/current/log-in', 'EntryController@currentLogIn')->name('current-log-in');
+    Route::get('/current/log-out', 'EntryController@currentLogOut')->name('current-log-out');
 });
 
 Route::get('/{path?}', function () {
