@@ -6,6 +6,7 @@ import {
 import React from 'react';
 import { connect } from "react-redux";
 import { Redirect, withRouter } from 'react-router-dom'
+import { FETCH_USER_LOGGED } from "../constants/action-types";
 
 const FormField = ({
     label,
@@ -70,7 +71,7 @@ class SignInPage extends React.Component {
     processSubmit(values) {
         axios.post("api/login", values)
         .then((response) => {
-          dispatch({type: FETCH_USER_LOGGED, payload: response.data});
+            this.props.dispatch({type: FETCH_USER_LOGGED, payload: response.data});
         })
         .catch((error) => {
             console.log('error', error);
