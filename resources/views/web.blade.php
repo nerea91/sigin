@@ -13,6 +13,15 @@
 
         <!-- Styles -->
         <style>
+
+            html, body {
+                width: 100%;
+                height: 100%;
+            }
+
+            body{
+                background: url('img/background.jpg')
+            }
             #entry{
                 text-align: center;
             }
@@ -22,6 +31,9 @@
             .cat img {
                 max-width: 600px;
                 max-height: 500px;
+                -webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+                -moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+                box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
             }
             #cat-img{
                 display: none;

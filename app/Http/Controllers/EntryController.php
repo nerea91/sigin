@@ -28,7 +28,7 @@ class EntryController extends Controller
     {
         $now = Carbon::now()->toDateString();
         $day = Day::firstOrCreate(['date' => $now]);
-        return response()->json(['input' => $day->inputs->last()]);
+        return response()->json(['input' => $day->inputs()->lastOfCurrentUser()->first()]);
     }
   
     /**
@@ -40,7 +40,7 @@ class EntryController extends Controller
     {
         $now = Carbon::now();
         $day = Day::firstOrCreate(['date' => $now->toDateString()]);
-        $input = Input::create(['entry_in' => $now->toDateTimeString(), 'day_id' => $day->getKey()]);
+        $input = Input::create(['entry_in' => $now->toDateTimeString(), 'day_id' => $day->getKey(), 'user_id' => auth()->user()->getKey()]);
         return response()->json(['input' => $input]);
     }
 
@@ -55,7 +55,7 @@ class EntryController extends Controller
         $day = Day::where(['date' => $now->toDateString()])->first();
 
         if($day) {
-            $input = $day->inputs->last();
+            $input = $day->inputs()->lastOfCurrentUser()->first();
             $input->entry_out = $now->toDateTimeString();
             $input->save();
             return response()->json(['input' => $input]);
