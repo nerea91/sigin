@@ -88837,6 +88837,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_User__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/User */ "./resources/js/components/User.js");
 /* harmony import */ var _components_Main__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/Main */ "./resources/js/components/Main.js");
 /* harmony import */ var _components_SignInPage__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/SignInPage */ "./resources/js/components/SignInPage.js");
+/* harmony import */ var _components_SignInList__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/SignInList */ "./resources/js/components/SignInList.js");
+
 
 
 
@@ -88851,6 +88853,9 @@ var Main = function Main(props) {
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], {
     path: "/sigin",
     component: _components_SignInPage__WEBPACK_IMPORTED_MODULE_4__["default"]
+  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], {
+    path: "/history",
+    component: _components_SignInList__WEBPACK_IMPORTED_MODULE_5__["default"]
   }));
 };
 
@@ -89178,6 +89183,180 @@ function Cat(props) {
 
 /***/ }),
 
+/***/ "./resources/js/components/Day.js":
+/*!****************************************!*\
+  !*** ./resources/js/components/Day.js ***!
+  \****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Hour__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Hour */ "./resources/js/components/Hour.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+var Day =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(Day, _React$Component);
+
+  function Day(props) {
+    var _this;
+
+    _classCallCheck(this, Day);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Day).call(this, props));
+    var _props$id = props.id,
+        id = _props$id === void 0 ? '' : _props$id,
+        _props$hours = props.hours,
+        hours = _props$hours === void 0 ? [] : _props$hours,
+        _props$day = props.day,
+        day = _props$day === void 0 ? '' : _props$day;
+    return _this;
+  }
+
+  _createClass(Day, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {}
+  }, {
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+
+      var listItems = this.props.hours.map(function (hour, index) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Hour__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          key: index,
+          entry_in: hour.entry_in,
+          entry_out: hour.entry_out,
+          day_id: _this2.props.id,
+          id: hour.id
+        });
+      });
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, this.props.day), listItems);
+    }
+  }]);
+
+  return Day;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (Day);
+
+/***/ }),
+
+/***/ "./resources/js/components/Hour.js":
+/*!*****************************************!*\
+  !*** ./resources/js/components/Hour.js ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+var Hour =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(Hour, _React$Component);
+
+  function Hour(props) {
+    var _this;
+
+    _classCallCheck(this, Hour);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Hour).call(this, props));
+    _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
+    var _props$entry_in = props.entry_in,
+        entry_in = _props$entry_in === void 0 ? '' : _props$entry_in,
+        _props$entry_out = props.entry_out,
+        entry_out = _props$entry_out === void 0 ? '' : _props$entry_out,
+        _props$day_id = props.day_id,
+        day_id = _props$day_id === void 0 ? '' : _props$day_id,
+        _props$id = props.id,
+        id = _props$id === void 0 ? '' : _props$id;
+    return _this;
+  }
+
+  _createClass(Hour, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {}
+  }, {
+    key: "handleChange",
+    value: function handleChange(type, event) {
+      //event.preventDefault();
+      console.log(type, event.target.value); //this.props.dispatch(updateHour($value, $type));
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        defaultValue: this.props.entry_in,
+        id: 'entry-in-' + this.props.id,
+        onBlur: function onBlur(event) {
+          return _this2.handleChange('in', event);
+        }
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        defaultValue: this.props.entry_out,
+        id: 'entry-out-' + this.props.id,
+        onBlur: function onBlur(event) {
+          return _this2.handleChange('out', event);
+        }
+      }));
+    }
+  }]);
+
+  return Hour;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (Hour);
+
+/***/ }),
+
 /***/ "./resources/js/components/Main.js":
 /*!*****************************************!*\
   !*** ./resources/js/components/Main.js ***!
@@ -89369,10 +89548,23 @@ function (_React$Component) {
         className: "navbar-nav ml-auto"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
         className: "nav-item"
+      }, this.props.user ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "btn-group"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "button",
+        className: "btn btn-info dropdown-toggle",
+        "data-toggle": "dropdown",
+        "aria-haspopup": "true",
+        "aria-expanded": "false"
+      }, this.props.user.name), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "dropdown-menu"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        className: "dropdown-item",
+        href: "#"
+      }, "Fichajes"))) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
         className: "nav-link",
         href: "/sigin"
-      }, this.props.user && this.props.user.name || "Sign IN"))))));
+      }, "Sign IN"))))));
     }
   }]);
 
@@ -89386,6 +89578,90 @@ function mapStateToProps(state) {
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps)(Nav));
+
+/***/ }),
+
+/***/ "./resources/js/components/SignInList.js":
+/*!***********************************************!*\
+  !*** ./resources/js/components/SignInList.js ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Day__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Day */ "./resources/js/components/Day.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+var SignInList =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(SignInList, _React$Component);
+
+  function SignInList() {
+    var _this;
+
+    _classCallCheck(this, SignInList);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(SignInList).call(this));
+    _this.state = {
+      days: [{
+        day: 'aaaa',
+        id: 1,
+        hours: [{
+          'entry_in': 1,
+          'entry_out': 2
+        }]
+      }]
+    };
+    return _this;
+  }
+
+  _createClass(SignInList, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {//this.props.dispatch(fetchDays());
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var listItems = this.state.days.map(function (day) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          key: day.id
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Day__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          day: day.day,
+          id: day.id,
+          hours: day.hours
+        }));
+      });
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, listItems);
+    }
+  }]);
+
+  return SignInList;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (SignInList);
 
 /***/ }),
 
@@ -89711,7 +89987,7 @@ function mapStateToProps(state) {
 /*!************************************************!*\
   !*** ./resources/js/constants/action-types.js ***!
   \************************************************/
-/*! exports provided: ADD_ARTICLE, FETCH_USERS_FULFILLED, FETCH_USERS_REJECTED, FETCH_USER_REJECTED, FETCH_USER_FULFILLED, FETCH_USER_LOGGED, FETCH_CURRENT_DAY, FETCH_CURRENT_FULFILLED, FETCH_LOGIN_IN_FULFILLED, FETCH_LOGIN_OUT_FULFILLED */
+/*! exports provided: ADD_ARTICLE, FETCH_USERS_FULFILLED, FETCH_USERS_REJECTED, FETCH_USER_REJECTED, FETCH_USER_FULFILLED, FETCH_USER_LOGGED, FETCH_CURRENT_DAY, FETCH_CURRENT_FULFILLED, FETCH_LOGIN_IN_FULFILLED, FETCH_LOGIN_OUT_FULFILLED, UPDATED_HOUR */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -89726,6 +90002,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_CURRENT_FULFILLED", function() { return FETCH_CURRENT_FULFILLED; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_LOGIN_IN_FULFILLED", function() { return FETCH_LOGIN_IN_FULFILLED; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_LOGIN_OUT_FULFILLED", function() { return FETCH_LOGIN_OUT_FULFILLED; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UPDATED_HOUR", function() { return UPDATED_HOUR; });
 var ADD_ARTICLE = "ADD_ARTICLE";
 var FETCH_USERS_FULFILLED = "FETCH_USERS_FULFILLED";
 var FETCH_USERS_REJECTED = "FETCH_USERS_REJECTED";
@@ -89736,6 +90013,7 @@ var FETCH_CURRENT_DAY = "FETCH_CURRENT_DAY";
 var FETCH_CURRENT_FULFILLED = "FETCH_CURRENT_FULFILLED";
 var FETCH_LOGIN_IN_FULFILLED = "FETCH_LOGIN_IN_FULFILLED";
 var FETCH_LOGIN_OUT_FULFILLED = "FETCH_LOGIN_OUT_FULFILLED";
+var UPDATED_HOUR = "UPDATED_HOUR";
 
 /***/ }),
 

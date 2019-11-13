@@ -24,7 +24,23 @@ class Nav extends React.Component{
                    
                     <ul className="navbar-nav ml-auto">
                         <li className="nav-item">
-                            <a className="nav-link" href="/sigin">{ this.props.user && this.props.user.name || "Sign IN" }</a>
+                            
+                            { this.props.user 
+                            
+                            ? 
+                                <div className="btn-group">
+                                    <button type="button" className="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        {this.props.user.name}
+                                    </button>
+                                    <div className="dropdown-menu">
+                                    <a className="dropdown-item" href="#">Fichajes</a>
+                                    </div>
+                                </div>
+                                
+                            : 
+                            
+                            <a className="nav-link" href="/sigin">Sign IN</a>}
+                           
                         </li>
                     </ul>
                 </div>
