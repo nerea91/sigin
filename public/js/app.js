@@ -89242,15 +89242,9 @@ function (_React$Component) {
     key: "componentDidMount",
     value: function componentDidMount() {}
   }, {
-    key: "componentDidUpdate",
-    value: function componentDidUpdate(prevProps) {
-      console.log('update');
-    }
-  }, {
     key: "handleClick",
     value: function handleClick() {
       //event.preventDefault();
-      console.log('click');
       this.state.hours.push({
         'entry_id': '',
         entry_out: ''
@@ -89347,6 +89341,7 @@ function (_React$Component) {
         id = _props$id === void 0 ? '' : _props$id,
         _props$diff = props.diff,
         diff = _props$diff === void 0 ? '' : _props$diff;
+    _this.state = props;
     return _this;
   }
 
@@ -89356,13 +89351,29 @@ function (_React$Component) {
   }, {
     key: "handleChange",
     value: function handleChange(type, event) {
+      var _this2 = this;
+
       //event.preventDefault();
-      console.log(type, event.target.value); //this.props.dispatch(updateHour($value, $type));
+      console.log(type, event.target.value, this.state);
+      var url = this.state.id ? "api/hour/" + this.state.id : "api/hour";
+      var data = {
+        entry_in: type == 'in' ? event.target.value : this.state.entry_in,
+        entry_out: type == 'out' ? event.target.value : this.state.entry_out,
+        day_id: this.state.day_id,
+        id: this.state.id
+      };
+      axios.post(url, data).then(function (response) {
+        _this2.setState(response.data.input);
+
+        console.log('despues', _this2.state);
+      })["catch"](function (error) {
+        console.log('error', error); //dispatch({type: "FETCH_USERS_REJECTED", payload: error});
+      }); //this.props.dispatch(updateHour($value, $type));
     }
   }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
+      var _this3 = this;
 
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "hour mb-05em"
@@ -89370,19 +89381,19 @@ function (_React$Component) {
         className: "hour"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         type: "text",
-        defaultValue: this.props.entry_in,
-        id: 'entry-in-' + this.props.id,
+        defaultValue: this.state.entry_in,
+        id: 'entry-in-' + this.state.id,
         onBlur: function onBlur(event) {
-          return _this2.handleChange('in', event);
+          return _this3.handleChange('in', event);
         }
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         type: "text",
-        defaultValue: this.props.entry_out,
-        id: 'entry-out-' + this.props.id,
+        defaultValue: this.state.entry_out,
+        id: 'entry-out-' + this.state.id,
         onBlur: function onBlur(event) {
-          return _this2.handleChange('out', event);
+          return _this3.handleChange('out', event);
         }
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, this.props.diff));
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, this.state.diff));
     }
   }]);
 

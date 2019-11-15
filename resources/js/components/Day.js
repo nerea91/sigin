@@ -18,13 +18,9 @@ class Day extends React.Component{
         
     }
 
-    componentDidUpdate(prevProps) {
-        console.log('update');
-    }
 
     handleClick() {
         //event.preventDefault();
-        console.log('click');
         this.state.hours.push({'entry_id':'', entry_out: ''});
         this.setState({
             id: this.state.id,
