@@ -89205,9 +89205,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
@@ -89233,6 +89233,8 @@ function (_React$Component) {
         hours = _props$hours === void 0 ? [] : _props$hours,
         _props$day = props.day,
         day = _props$day === void 0 ? '' : _props$day;
+    _this.handleClick = _this.handleClick.bind(_assertThisInitialized(_this));
+    _this.state = props;
     return _this;
   }
 
@@ -89240,20 +89242,48 @@ function (_React$Component) {
     key: "componentDidMount",
     value: function componentDidMount() {}
   }, {
+    key: "componentDidUpdate",
+    value: function componentDidUpdate(prevProps) {
+      console.log('update');
+    }
+  }, {
+    key: "handleClick",
+    value: function handleClick() {
+      //event.preventDefault();
+      console.log('click');
+      this.state.hours.push({
+        'entry_id': '',
+        entry_out: ''
+      });
+      this.setState({
+        id: this.state.id,
+        hours: this.state.hours,
+        day: this.state.day
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
       var _this2 = this;
 
-      var listItems = this.props.hours.map(function (hour, index) {
+      var listItems = this.state.hours.map(function (hour, index) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Hour__WEBPACK_IMPORTED_MODULE_1__["default"], {
           key: index,
           entry_in: hour.entry_in,
           entry_out: hour.entry_out,
           day_id: _this2.props.id,
-          id: hour.id
+          id: hour.id,
+          diff: hour.diff
         });
       });
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, this.props.day), listItems);
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "days mb-1em"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        className: "day"
+      }, this.state.day, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        className: "oi oi-plus",
+        onClick: this.handleClick
+      })), listItems);
     }
   }]);
 
@@ -89314,7 +89344,9 @@ function (_React$Component) {
         _props$day_id = props.day_id,
         day_id = _props$day_id === void 0 ? '' : _props$day_id,
         _props$id = props.id,
-        id = _props$id === void 0 ? '' : _props$id;
+        id = _props$id === void 0 ? '' : _props$id,
+        _props$diff = props.diff,
+        diff = _props$diff === void 0 ? '' : _props$diff;
     return _this;
   }
 
@@ -89332,7 +89364,11 @@ function (_React$Component) {
     value: function render() {
       var _this2 = this;
 
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "hour mb-05em"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "hour"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         type: "text",
         defaultValue: this.props.entry_in,
         id: 'entry-in-' + this.props.id,
@@ -89346,7 +89382,7 @@ function (_React$Component) {
         onBlur: function onBlur(event) {
           return _this2.handleChange('out', event);
         }
-      }));
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, this.props.diff));
     }
   }]);
 
@@ -89560,7 +89596,7 @@ function (_React$Component) {
         className: "dropdown-menu"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
         className: "dropdown-item",
-        href: "#"
+        href: "/history"
       }, "Fichajes"))) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
         className: "nav-link",
         href: "/sigin"
@@ -89626,21 +89662,23 @@ function (_React$Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(SignInList).call(this));
     _this.state = {
-      days: [{
-        day: 'aaaa',
-        id: 1,
-        hours: [{
-          'entry_in': 1,
-          'entry_out': 2
-        }]
-      }]
+      days: []
     };
     return _this;
   }
 
   _createClass(SignInList, [{
     key: "componentDidMount",
-    value: function componentDidMount() {//this.props.dispatch(fetchDays());
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      axios.get("api/history").then(function (response) {
+        _this2.setState({
+          days: Object.values(response.data.days)
+        });
+      })["catch"](function (error) {
+        console.log('error', error); //dispatch({type: "FETCH_USERS_REJECTED", payload: error});
+      });
     }
   }, {
     key: "render",
@@ -89649,12 +89687,14 @@ function (_React$Component) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           key: day.id
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Day__WEBPACK_IMPORTED_MODULE_1__["default"], {
-          day: day.day,
+          day: day.date,
           id: day.id,
-          hours: day.hours
+          hours: day.inputs
         }));
       });
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, listItems);
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        id: "days-container"
+      }, listItems);
     }
   }]);
 

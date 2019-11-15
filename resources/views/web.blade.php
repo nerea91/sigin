@@ -9,6 +9,7 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css" rel="stylesheet">
         <link href="css/app.css" rel="stylesheet">
 
         <!-- Styles -->
@@ -37,6 +38,33 @@
             }
             #cat-img{
                 display: none;
+            }
+
+            .days{
+                display: flex;
+                flex-direction: column;
+            }
+
+            .day, .hour{
+                align-self: center;
+            }
+
+            .hour > input {
+                margin-right: 1em;
+            }
+
+            .mb-1em{
+                margin-bottom: 1em;
+            }
+            .mb-05em{
+                margin-bottom: 0.5em;
+            }
+            #days-container{
+                margin: auto;
+                width: 650px;
+                background: antiquewhite;
+                padding-bottom: 2em;
+                padding-top: 2em;
             }
         </style>
     </head>

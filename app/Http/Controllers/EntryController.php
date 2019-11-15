@@ -62,4 +62,35 @@ class EntryController extends Controller
         }
         return response()->json(['error' => 'Not found'], 404);
     }
+
+     /**
+     * Log out Hour
+     *
+     * @return JSON
+     */
+    public function history($days = 30)
+    {
+        $to = Carbon::now()->toDateString();
+        $since = Carbon::now()->subDays($days);
+        
+        $daysStored = Day::whereBetween('date', [$since->toDateString(), $to])->whereHas('inputs', function($query){
+            return $query->where('user_id', auth()->user()->getKey());
+        })->get()->keyBy('date')->toArray();
+
+        $dates = array_keys($daysStored);
+        
+        for($i = 0; $i <= $days;$i++) {
+            $day = $since->toDateString();
+            if( ! in_array($day, $dates)) {
+                $daysStored[$day] = [ 'id' => $day ,'date' => $day, 'inputs' => [['id' => '', 'entry_in' => '', 'entry_out' => '', 'diff' => '']] ];
+            } else {
+                foreach($daysStored[$day]['inputs'] as $key => $input)
+                    $daysStored[$day]['inputs'][$key]['diff'] = Carbon::parse($input['entry_in'])->diffForHumans($input['entry_out']);
+            }
+                
+            $since->addDay();
+        }
+        ksort($daysStored);
+        return response()->json(['days' => $daysStored]);
+    }
 }

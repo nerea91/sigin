@@ -26,6 +26,7 @@ Route::group(['prefix' => 'api'], function() {
     Route::get('/current', 'EntryController@currentDay')->name('current-day');
     Route::get('/current/log-in', 'EntryController@currentLogIn')->name('current-log-in');
     Route::get('/current/log-out', 'EntryController@currentLogOut')->name('current-log-out');
+    Route::get('/history/{days?}', 'EntryController@history')->name('history');
 });
 
 Route::get('/{path?}', function () {

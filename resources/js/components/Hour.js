@@ -9,7 +9,8 @@ class Hour extends React.Component{
             entry_in = '',
             entry_out = '',
             day_id = '',
-            id = ''
+            id = '',
+            diff = ''
         } = props;
 
         
@@ -26,11 +27,15 @@ class Hour extends React.Component{
 
     }
 
+
     render() {
         return (
-            <div>
-                <input type="text" defaultValue={this.props.entry_in} id={'entry-in-'+this.props.id} onBlur={(event) => this.handleChange('in', event)}/>
-                <input type="text" defaultValue={this.props.entry_out} id={'entry-out-'+this.props.id} onBlur={(event) => this.handleChange('out', event)}/>
+            <div className="hour mb-05em">
+                <div className="hour">
+                    <input type="text" defaultValue={this.props.entry_in} id={'entry-in-'+this.props.id} onBlur={(event) => this.handleChange('in', event)}/>
+                    <input type="text" defaultValue={this.props.entry_out} id={'entry-out-'+this.props.id} onBlur={(event) => this.handleChange('out', event)}/>
+                </div>
+                <span>{this.props.diff}</span>
             </div>
         );
     }

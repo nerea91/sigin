@@ -33,7 +33,7 @@ class Nav extends React.Component{
                                         {this.props.user.name}
                                     </button>
                                     <div className="dropdown-menu">
-                                    <a className="dropdown-item" href="#">Fichajes</a>
+                                    <a className="dropdown-item" href="/history">Fichajes</a>
                                     </div>
                                 </div>
                                 
