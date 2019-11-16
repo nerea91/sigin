@@ -43,6 +43,7 @@
             .days{
                 display: flex;
                 flex-direction: column;
+                scroll-behavior: smooth;
             }
 
             .day, .hour{

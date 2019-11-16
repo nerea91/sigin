@@ -89232,7 +89232,9 @@ function (_React$Component) {
         _props$hours = props.hours,
         hours = _props$hours === void 0 ? [] : _props$hours,
         _props$day = props.day,
-        day = _props$day === void 0 ? '' : _props$day;
+        day = _props$day === void 0 ? '' : _props$day,
+        _props$isCurrent = props.isCurrent,
+        isCurrent = _props$isCurrent === void 0 ? false : _props$isCurrent;
     _this.handleClick = _this.handleClick.bind(_assertThisInitialized(_this));
     _this.state = props;
     return _this;
@@ -89240,7 +89242,17 @@ function (_React$Component) {
 
   _createClass(Day, [{
     key: "componentDidMount",
-    value: function componentDidMount() {}
+    value: function componentDidMount() {
+      if (this.state.isCurrent) {
+        var id = this.props.day;
+        var yourElement = document.getElementById(id);
+        var y = yourElement.getBoundingClientRect().top + window.pageYOffset;
+        window.scrollTo({
+          top: y,
+          behavior: 'smooth'
+        });
+      }
+    }
   }, {
     key: "handleClick",
     value: function handleClick() {
@@ -89252,7 +89264,8 @@ function (_React$Component) {
       this.setState({
         id: this.state.id,
         hours: this.state.hours,
-        day: this.state.day
+        day: this.state.day,
+        isCurrent: this.state.isCurrent
       });
     }
   }, {
@@ -89273,6 +89286,7 @@ function (_React$Component) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "days mb-1em"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        id: this.state.day,
         className: "day"
       }, this.state.day, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
         className: "oi oi-plus",
@@ -89700,7 +89714,8 @@ function (_React$Component) {
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Day__WEBPACK_IMPORTED_MODULE_1__["default"], {
           day: day.date,
           id: day.id,
-          hours: day.inputs
+          hours: day.inputs,
+          isCurrent: day.isCurrent
         }));
       });
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {

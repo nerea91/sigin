@@ -25,7 +25,7 @@ class SignInList extends React.Component{
     render() {
         const listItems = this.state.days.map((day) =>
         <div key={day.id}>
-            <Day day={day.date} id={day.id} hours={day.inputs}/>
+            <Day day={day.date} id={day.id} hours={day.inputs} isCurrent={day.isCurrent} />
         </div>
         );
 

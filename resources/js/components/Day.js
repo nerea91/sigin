@@ -9,13 +9,20 @@ class Day extends React.Component{
         const { id = '',
             hours = [],
             day = '',
+            isCurrent = false
           } = props;
           this.handleClick = this.handleClick.bind(this);
           this.state = props;
     }
 
     componentDidMount(){
-        
+        if(this.state.isCurrent) {
+            const id = this.props.day;
+            const yourElement = document.getElementById(id);
+            const y = yourElement.getBoundingClientRect().top + window.pageYOffset;
+            
+            window.scrollTo({top: y, behavior: 'smooth'})   
+        }
     }
 
 
@@ -25,7 +32,8 @@ class Day extends React.Component{
         this.setState({
             id: this.state.id,
             hours: this.state.hours,
-            day: this.state.day
+            day: this.state.day,
+            isCurrent: this.state.isCurrent
         });
     }
 
@@ -38,7 +46,7 @@ class Day extends React.Component{
 
         return (
             <div className="days mb-1em">
-                <span className="day" >{this.state.day} <span className="oi oi-plus" onClick={this.handleClick} ></span></span>
+                <span id={this.state.day} className="day" >{this.state.day} <span className="oi oi-plus" onClick={this.handleClick} ></span></span>
                 {listItems}
             </div>
         );

@@ -90,6 +90,8 @@ class EntryController extends Controller
                 }
                     
             }
+
+            $daysStored[$day]['isCurrent'] = $day == $to ? true : false;
                 
             $since->addDay();
         }
