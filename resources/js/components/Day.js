@@ -9,7 +9,8 @@ class Day extends React.Component{
         const { id = '',
             hours = [],
             day = '',
-            isCurrent = false
+            isCurrent = false,
+            weekDayName = ''
           } = props;
           this.handleClick = this.handleClick.bind(this);
           this.state = props;
@@ -33,7 +34,8 @@ class Day extends React.Component{
             id: this.state.id,
             hours: this.state.hours,
             day: this.state.day,
-            isCurrent: this.state.isCurrent
+            isCurrent: this.state.isCurrent,
+            weekDayName: this.state.weekDayName
         });
     }
 
@@ -46,7 +48,7 @@ class Day extends React.Component{
 
         return (
             <div className="days mb-1em">
-                <span id={this.state.day} className="day" >{this.state.day} <span className="oi oi-plus" onClick={this.handleClick} ></span></span>
+                <span id={this.state.day} className="day" ><span>{this.state.weekDayName}</span> - {this.state.day} <span className="oi oi-plus" onClick={this.handleClick} ></span></span>
                 {listItems}
             </div>
         );

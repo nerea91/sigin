@@ -64,6 +64,10 @@
                 margin: auto;
                 width: 650px;
                 background: antiquewhite;
+            }
+
+            fieldset{
+                border: solid;
                 padding-bottom: 2em;
                 padding-top: 2em;
             }

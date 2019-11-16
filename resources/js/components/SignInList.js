@@ -1,19 +1,19 @@
 
 import React from "react";
-import Day from './Day';
+import Week from './Week';
 
 class SignInList extends React.Component{
     constructor(){
         super();
         this.state = {
-            days: [],
+            weeks: [],
         }
     }
 
     componentDidMount(){
         axios.get("api/history")
         .then((response) => {
-            this.setState({days: Object.values(response.data.days)});
+            this.setState({weeks: Object.values(response.data.weeks)});
             
         })
         .catch((error) => {
@@ -23,9 +23,9 @@ class SignInList extends React.Component{
     }
 
     render() {
-        const listItems = this.state.days.map((day) =>
-        <div key={day.id}>
-            <Day day={day.date} id={day.id} hours={day.inputs} isCurrent={day.isCurrent} />
+        const listItems = this.state.weeks.map((week, index) =>
+        <div key={index}>
+            <Week days={week.days} diff={week.diffTotal} />
         </div>
         );
 

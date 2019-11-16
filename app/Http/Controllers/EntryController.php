@@ -16,7 +16,7 @@ class EntryController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     /**
@@ -78,25 +78,41 @@ class EntryController extends Controller
         })->get()->keyBy('date')->toArray();
 
         $dates = array_keys($daysStored);
+        $weeks = [];
         
         for($i = 0; $i <= $days;$i++) {
             $day = $since->toDateString();
+
+            if( ! isset($weeks[$since->weekOfYear])) {
+                $weeks[$since->weekOfYear] = [];
+                $weeks[$since->weekOfYear]['days'] = [];
+            }
+                
+
             if( ! in_array($day, $dates)) {
                 $dayEntity = Day::create(['date' => $day]);
-                $daysStored[$day] = [ 'id' => $dayEntity->getKey() ,'date' => $day, 'inputs' => [['id' => '', 'entry_in' => '', 'entry_out' => '', 'diff' => '']] ];
+                $daysStored[$day] = [ 'id' => $dayEntity->getKey() ,'date' => $day, 'inputs' => [['id' => '', 'entry_in' => '', 'entry_out' => '', 'diff' => '', 'diffInSeconds' => 0]] ];
             } else {
                 foreach($daysStored[$day]['inputs'] as $key => $input) {
-                    $daysStored[$day]['inputs'][$key]['diff'] = Carbon::parse($input['entry_in'])->diffForHumans($input['entry_out']);
+                    $in = Carbon::parse($input['entry_in']);
+                    $daysStored[$day]['inputs'][$key]['diffInSeconds'] = $in->diffInSeconds($input['entry_out']);
+                    list($hours, $minutes) = $this->getHoursAndMinutesPassedFromSeconds($daysStored[$day]['inputs'][$key]['diffInSeconds']);
+                    $daysStored[$day]['inputs'][$key]['diff'] = sprintf('Has trabajado %s horas y %s minutos', $hours, $minutes);
+                    
                 }
                     
             }
 
             $daysStored[$day]['isCurrent'] = $day == $to ? true : false;
+            $daysStored[$day]['weekDayName'] = Day::WEEKDAYS[$since->weekday()];
+            $weeks[$since->weekOfYear]['days'][] = $daysStored[$day];
                 
             $since->addDay();
         }
-        ksort($daysStored);
-        return response()->json(['days' => $daysStored]);
+
+        $this->getHoursInWeeks($weeks);
+        
+        return response()->json(['weeks' => $weeks]);
     }
 
     /**
@@ -132,7 +148,10 @@ class EntryController extends Controller
         
         $input->fill($validatedData);
         $input->save();
-        $input->diff = Carbon::parse($input->entry_in)->diffForHumans($input->entry_out);
+        $in = Carbon::parse($input->entry_in);
+        
+        list($hours, $minutes) = $this->getHoursAndMinutesPassedFromSeconds($in->diffInSeconds($input->entry_out));
+        $input->diff  = sprintf('Has trabajado %s horas y %s minutos', $hours, $minutes);
 
         return response()->json(['input' => $input ]);
     }
@@ -168,5 +187,43 @@ class EntryController extends Controller
         
         if(isset($validatedData['entry_out']))
             $validatedData['entry_out'] = substr($day->date, 0, 10).' '.$validatedData['entry_out'];
+    }
+
+    /**
+     * Get hours in week
+     *
+     * @param [type] $weeks
+     * @return void
+     */
+    private function getHoursInWeeks(&$weeks)
+    {
+        foreach ($weeks as $key => $data) {
+            $totalInSeconds = 0;
+            foreach ($data['days'] as $days) {
+                foreach ($days['inputs'] as $input) {
+                    $totalInSeconds += $input['diffInSeconds'];
+                }
+            }
+            $weeks[$key]['diffInSeconds'] = $totalInSeconds;
+            list($hours, $minutes) = $this->getHoursAndMinutesPassedFromSeconds($totalInSeconds);
+
+            $weeks[$key]['diffTotal'] = sprintf('Esta semana has trabajado %s horas y %s minutos', $hours, $minutes);
+        }
+    }
+
+    /**
+     * Get hours and minutes passed from $totalInSeconds
+     *
+     * @param Int $totalInSeconds
+     * @return Array
+     */
+    private function getHoursAndMinutesPassedFromSeconds($totalInSeconds)
+    {
+        $totalInMinutes = $totalInSeconds/60;
+        $totalInHours = $totalInSeconds/3600;
+
+        $hours = intval($totalInHours);
+        $minutes = intval($totalInMinutes - ($hours*60));
+        return [$hours, $minutes];
     }
 }
