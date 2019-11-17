@@ -89236,7 +89236,9 @@ function (_React$Component) {
         _props$isCurrent = props.isCurrent,
         isCurrent = _props$isCurrent === void 0 ? false : _props$isCurrent,
         _props$weekDayName = props.weekDayName,
-        weekDayName = _props$weekDayName === void 0 ? '' : _props$weekDayName;
+        weekDayName = _props$weekDayName === void 0 ? '' : _props$weekDayName,
+        _props$updateWeekTota = props.updateWeekTotal,
+        updateWeekTotal = _props$updateWeekTota === void 0 ? null : _props$updateWeekTota;
     _this.handleClick = _this.handleClick.bind(_assertThisInitialized(_this));
     _this.state = props;
     return _this;
@@ -89278,6 +89280,7 @@ function (_React$Component) {
 
       var listItems = this.state.hours.map(function (hour, index) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Hour__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          updateWeekTotal: _this2.props.updateWeekTotal,
           key: index,
           entry_in: hour.entry_in,
           entry_out: hour.entry_out,
@@ -89291,7 +89294,9 @@ function (_React$Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
         id: this.state.day,
         className: "day"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, this.state.weekDayName), " - ", this.state.day, " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        className: "day-text"
+      }, this.state.weekDayName, " - ", this.state.day, " "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
         className: "oi oi-plus",
         onClick: this.handleClick
       })), listItems);
@@ -89357,7 +89362,9 @@ function (_React$Component) {
         _props$id = props.id,
         id = _props$id === void 0 ? '' : _props$id,
         _props$diff = props.diff,
-        diff = _props$diff === void 0 ? '' : _props$diff;
+        diff = _props$diff === void 0 ? '' : _props$diff,
+        _props$updateWeekTota = props.updateWeekTotal,
+        updateWeekTotal = _props$updateWeekTota === void 0 ? null : _props$updateWeekTota;
     _this.state = props;
     return _this;
   }
@@ -89371,7 +89378,6 @@ function (_React$Component) {
       var _this2 = this;
 
       //event.preventDefault();
-      console.log(type, event.target.value, this.state);
       var url = this.state.id ? "api/hour/" + this.state.id : "api/hour";
       var data = {
         entry_in: type == 'in' ? event.target.value : this.state.entry_in,
@@ -89382,7 +89388,7 @@ function (_React$Component) {
       axios.post(url, data).then(function (response) {
         _this2.setState(response.data.input);
 
-        console.log('despues', _this2.state);
+        _this2.props.updateWeekTotal(_this2.props.day_id);
       })["catch"](function (error) {
         console.log('error', error); //dispatch({type: "FETCH_USERS_REJECTED", payload: error});
       }); //this.props.dispatch(updateHour($value, $type));
@@ -89397,6 +89403,7 @@ function (_React$Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "hour"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        className: "form-control",
         type: "text",
         defaultValue: this.state.entry_in,
         id: 'entry-in-' + this.state.id,
@@ -89404,13 +89411,16 @@ function (_React$Component) {
           return _this3.handleChange('in', event);
         }
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        className: "form-control",
         type: "text",
         defaultValue: this.state.entry_out,
         id: 'entry-out-' + this.state.id,
         onBlur: function onBlur(event) {
           return _this3.handleChange('out', event);
         }
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, this.state.diff));
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        className: "total-hours"
+      }, this.state.diff));
     }
   }]);
 
@@ -90072,9 +90082,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
@@ -90095,6 +90105,7 @@ function (_React$Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Week).call(this, props));
     _this.state = props;
+    _this.updateWeekTotal = _this.updateWeekTotal.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -90102,12 +90113,30 @@ function (_React$Component) {
     key: "componentDidMount",
     value: function componentDidMount() {}
   }, {
+    key: "updateWeekTotal",
+    value: function updateWeekTotal(day_id) {
+      var _this2 = this;
+
+      console.log('weeeeek');
+      axios.get("api/week-hours/" + day_id).then(function (response) {
+        _this2.setState({
+          weeks: _this2.state.weeks,
+          diff: response.data.diff
+        });
+      })["catch"](function (error) {
+        console.log('error', error); //dispatch({type: "FETCH_USERS_REJECTED", payload: error});
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
+      var _this3 = this;
+
       var listItems = this.state.days.map(function (day) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           key: day.id
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Day__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          updateWeekTotal: _this3.updateWeekTotal,
           weekDayName: day.weekDayName,
           day: day.date,
           id: day.id,
@@ -90117,7 +90146,9 @@ function (_React$Component) {
       });
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("fieldset", null, listItems, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "text-center"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, this.state.diff)));
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        className: "total-week"
+      }, this.state.diff)));
     }
   }]);
 

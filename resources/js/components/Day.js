@@ -10,7 +10,8 @@ class Day extends React.Component{
             hours = [],
             day = '',
             isCurrent = false,
-            weekDayName = ''
+            weekDayName = '',
+            updateWeekTotal = null
           } = props;
           this.handleClick = this.handleClick.bind(this);
           this.state = props;
@@ -36,19 +37,19 @@ class Day extends React.Component{
             day: this.state.day,
             isCurrent: this.state.isCurrent,
             weekDayName: this.state.weekDayName
-        });
+        });   
     }
 
     render() {
         const listItems = this.state.hours.map((hour, index) =>
         
-            <Hour key={index} entry_in={hour.entry_in} entry_out={hour.entry_out} day_id={this.props.id} id={hour.id} diff={hour.diff}/>
+            <Hour updateWeekTotal={this.props.updateWeekTotal} key={index} entry_in={hour.entry_in} entry_out={hour.entry_out} day_id={this.props.id} id={hour.id} diff={hour.diff}/>
 
         );
 
         return (
             <div className="days mb-1em">
-                <span id={this.state.day} className="day" ><span>{this.state.weekDayName}</span> - {this.state.day} <span className="oi oi-plus" onClick={this.handleClick} ></span></span>
+                <span id={this.state.day} className="day" ><span className="day-text">{this.state.weekDayName} - {this.state.day} </span><span className="oi oi-plus" onClick={this.handleClick} ></span></span>
                 {listItems}
             </div>
         );

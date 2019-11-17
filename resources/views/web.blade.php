@@ -44,6 +44,9 @@
                 display: flex;
                 flex-direction: column;
                 scroll-behavior: smooth;
+                background: #f4d4aa;
+                margin: 1em;
+                padding: 1em;
             }
 
             .day, .hour{
@@ -69,7 +72,30 @@
             fieldset{
                 border: solid;
                 padding-bottom: 2em;
-                padding-top: 2em;
+                padding-top: 1em;
+            }
+
+            .day-text{
+                font-weight: bold;
+            }
+
+            .oi-plus{
+                color: #de8a1c;
+                cursor: pointer;
+            }
+
+            .total-week{
+                font-weight: bold;
+                color: darkgreen;
+            }
+
+            .total-hours{
+                color: brown;
+            }
+
+            .form-control{
+                width: auto;
+                display: inline;
             }
         </style>
     </head>

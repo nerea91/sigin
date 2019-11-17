@@ -6,16 +6,33 @@ class Week extends React.Component{
     constructor(props){
         super(props);
         this.state = props;
+        this.updateWeekTotal= this.updateWeekTotal.bind(this);
     }
 
     componentDidMount(){
       
     }
 
+    updateWeekTotal(day_id){
+        console.log('weeeeek');
+        axios.get("api/week-hours/"+day_id)
+        .then((response) => {
+           this.setState({
+                weeks: this.state.weeks,
+                diff: response.data.diff
+            });
+            
+        })
+        .catch((error) => {
+            console.log('error', error);
+            //dispatch({type: "FETCH_USERS_REJECTED", payload: error});
+        })
+    }
+
     render() {
         const listItems = this.state.days.map((day) =>
         <div key={day.id}>
-            <Day weekDayName={day.weekDayName} day={day.date} id={day.id} hours={day.inputs} isCurrent={day.isCurrent} />
+            <Day updateWeekTotal={this.updateWeekTotal} weekDayName={day.weekDayName} day={day.date} id={day.id} hours={day.inputs} isCurrent={day.isCurrent} />
         </div>
         );
 
@@ -24,7 +41,7 @@ class Week extends React.Component{
                 {listItems}
 
                 <div className="text-center">
-                    <span>{this.state.diff}</span>
+                    <span className="total-week">{this.state.diff}</span>
                 </div>
             </fieldset>
             

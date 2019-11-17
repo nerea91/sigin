@@ -201,7 +201,8 @@ class EntryController extends Controller
             $totalInSeconds = 0;
             foreach ($data['days'] as $days) {
                 foreach ($days['inputs'] as $input) {
-                    $totalInSeconds += $input['diffInSeconds'];
+                    if($input['entry_in'] and $input['entry_out'])
+                        $totalInSeconds += $input['diffInSeconds'];
                 }
             }
             $weeks[$key]['diffInSeconds'] = $totalInSeconds;
@@ -209,6 +210,41 @@ class EntryController extends Controller
 
             $weeks[$key]['diffTotal'] = sprintf('Esta semana has trabajado %s horas y %s minutos', $hours, $minutes);
         }
+    }
+
+    /**
+     * Get hours in week
+     *
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function getHoursInWeek($id)
+    {
+        $day = Day::find($id);
+        $date = Carbon::parse($day->date);
+        
+        $count = ($date->weekday() == 0) ? 6 : $date->weekday() - 1;
+
+        for($i = $count; $i > 0; $i--)
+            $date->subDay();
+
+        $days = Day::whereBetween('date', [$date->toDateString(), $date->addDays(6)->toDateString()])->whereHas('inputs', function($query){
+            return $query->where('user_id', auth()->user()->getKey());
+        })->get()->keyBy('date')->toArray();
+    
+        $totalInSeconds = 0;
+        foreach ($days as $daysKey => $day) {
+            foreach ($day['inputs'] as $key => $input) {
+                if($input['entry_in'] and $input['entry_out']) {
+                    $in = Carbon::parse($input['entry_in']);
+                    $totalInSeconds += $days[$daysKey]['inputs'][$key]['diffInSeconds'] = $in->diffInSeconds($input['entry_out']);
+                }
+            }
+        }
+       
+        list($hours, $minutes) = $this->getHoursAndMinutesPassedFromSeconds($totalInSeconds);
+
+        return response()->json(['diff' => sprintf('Esta semana has trabajado %s horas y %s minutos', $hours, $minutes)]); 
     }
 
     /**

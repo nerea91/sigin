@@ -10,7 +10,8 @@ class Hour extends React.Component{
             entry_out = '',
             day_id = '',
             id = '',
-            diff = ''
+            diff = '',
+            updateWeekTotal = null
         } = props;
 
         this.state = props;
@@ -22,19 +23,18 @@ class Hour extends React.Component{
 
     handleChange(type, event) {
         //event.preventDefault();
-        console.log(type, event.target.value, this.state);
         let url = this.state.id ? "api/hour/"+this.state.id : "api/hour";
         let data = {
             entry_in: (type == 'in') ? event.target.value : this.state.entry_in,
             entry_out: (type == 'out') ? event.target.value : this.state.entry_out,
             day_id: this.state.day_id,
-            id: this.state.id,
+            id: this.state.id
         };
 
         axios.post(url, data)
         .then((response) => {
             this.setState(response.data.input);
-            console.log('despues', this.state);
+            this.props.updateWeekTotal(this.props.day_id);
             
         })
         .catch((error) => {
@@ -52,10 +52,10 @@ class Hour extends React.Component{
         return (
             <div className="hour mb-05em">
                 <div className="hour">
-                    <input type="text" defaultValue={this.state.entry_in} id={'entry-in-'+this.state.id} onBlur={(event) => this.handleChange('in', event)}/>
-                    <input type="text" defaultValue={this.state.entry_out} id={'entry-out-'+this.state.id} onBlur={(event) => this.handleChange('out', event)}/>
+                    <input className="form-control" type="text" defaultValue={this.state.entry_in} id={'entry-in-'+this.state.id} onBlur={(event) => this.handleChange('in', event)}/>
+                    <input className="form-control" type="text" defaultValue={this.state.entry_out} id={'entry-out-'+this.state.id} onBlur={(event) => this.handleChange('out', event)}/>
                 </div>
-                <span>{this.state.diff}</span>
+                <span className="total-hours">{this.state.diff}</span>
             </div>
         );
     }
