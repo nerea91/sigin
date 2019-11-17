@@ -88867,7 +88867,7 @@ var Main = function Main(props) {
 /*!***************************************!*\
   !*** ./resources/js/actions/entry.js ***!
   \***************************************/
-/*! exports provided: fetchCurrentDay, loginIn, loginOut */
+/*! exports provided: fetchCurrentDay, loginIn, loginOut, fetchWeeks, fetchWeekHours, fetchDayHours */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -88875,6 +88875,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchCurrentDay", function() { return fetchCurrentDay; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loginIn", function() { return loginIn; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loginOut", function() { return loginOut; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchWeeks", function() { return fetchWeeks; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchWeekHours", function() { return fetchWeekHours; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchDayHours", function() { return fetchDayHours; });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _constants_action_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../constants/action-types */ "./resources/js/constants/action-types.js");
@@ -88908,6 +88911,38 @@ function loginOut() {
         payload: response.data
       });
     })["catch"](function (error) {});
+  };
+}
+function fetchWeeks() {
+  return function (dispatch) {
+    axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("api/history").then(function (response) {
+      dispatch({
+        type: _constants_action_types__WEBPACK_IMPORTED_MODULE_1__["FETCH_WEEKS_FULFILLED"],
+        payload: response.data
+      });
+    })["catch"](function (error) {});
+  };
+}
+function fetchWeekHours(day_id) {
+  return function (dispatch) {
+    axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("api/week-hours/" + day_id).then(function (response) {
+      dispatch({
+        type: _constants_action_types__WEBPACK_IMPORTED_MODULE_1__["FETCH_WEEK_HOURS_FULFILLED"],
+        payload: response.data
+      });
+    })["catch"](function (error) {});
+  };
+}
+function fetchDayHours(day_id) {
+  return function (dispatch) {
+    axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("api/day-hours/" + day_id).then(function (response) {
+      dispatch({
+        type: _constants_action_types__WEBPACK_IMPORTED_MODULE_1__["FETCH_DAY_HORS_FULFILLED"],
+        payload: response.data
+      });
+    })["catch"](function (error) {
+      console.log('error', error);
+    });
   };
 }
 
@@ -89195,6 +89230,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Hour__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Hour */ "./resources/js/components/Hour.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _actions_entry__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../actions/entry */ "./resources/js/actions/entry.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -89216,6 +89253,8 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
+
 var Day =
 /*#__PURE__*/
 function (_React$Component) {
@@ -89227,30 +89266,15 @@ function (_React$Component) {
     _classCallCheck(this, Day);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Day).call(this, props));
-    var _props$id = props.id,
-        id = _props$id === void 0 ? '' : _props$id,
-        _props$hours = props.hours,
-        hours = _props$hours === void 0 ? [] : _props$hours,
-        _props$day = props.day,
-        day = _props$day === void 0 ? '' : _props$day,
-        _props$isCurrent = props.isCurrent,
-        isCurrent = _props$isCurrent === void 0 ? false : _props$isCurrent,
-        _props$weekDayName = props.weekDayName,
-        weekDayName = _props$weekDayName === void 0 ? '' : _props$weekDayName,
-        _props$updateWeekTota = props.updateWeekTotal,
-        updateWeekTotal = _props$updateWeekTota === void 0 ? null : _props$updateWeekTota,
-        _props$diff = props.diff,
-        diff = _props$diff === void 0 ? '' : _props$diff;
     _this.handleClick = _this.handleClick.bind(_assertThisInitialized(_this));
     _this.updateDayTotal = _this.updateDayTotal.bind(_assertThisInitialized(_this));
-    _this.state = props;
     return _this;
   }
 
   _createClass(Day, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      if (this.state.isCurrent) {
+      if (this.props.isCurrent) {
         var id = this.props.day;
         var yourElement = document.getElementById(id);
         var y = yourElement.getBoundingClientRect().top + window.pageYOffset;
@@ -89263,20 +89287,7 @@ function (_React$Component) {
   }, {
     key: "updateDayTotal",
     value: function updateDayTotal(day_id) {
-      var _this2 = this;
-
-      axios.get("api/day-hours/" + day_id).then(function (response) {
-        _this2.setState({
-          id: _this2.state.id,
-          hours: _this2.state.hours,
-          day: _this2.state.day,
-          isCurrent: _this2.state.isCurrent,
-          weekDayName: _this2.state.weekDayName,
-          diff: response.data.diff
-        });
-      })["catch"](function (error) {
-        console.log('error', error); //dispatch({type: "FETCH_USERS_REJECTED", payload: error});
-      });
+      this.props.dispatch(Object(_actions_entry__WEBPACK_IMPORTED_MODULE_3__["fetchDayHours"])(day_id));
     }
   }, {
     key: "handleClick",
@@ -89298,16 +89309,16 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this2 = this;
 
-      var listItems = this.state.hours.map(function (hour, index) {
+      var listItems = this.props.hours.map(function (hour, index) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Hour__WEBPACK_IMPORTED_MODULE_1__["default"], {
-          updateDayTotal: _this3.updateDayTotal,
-          updateWeekTotal: _this3.props.updateWeekTotal,
+          updateDayTotal: _this2.updateDayTotal,
+          updateWeekTotal: _this2.props.updateWeekTotal,
           key: index,
           entry_in: hour.entry_in,
           entry_out: hour.entry_out,
-          day_id: _this3.props.id,
+          day_id: _this2.props.id,
           id: hour.id,
           diff: hour.diff
         });
@@ -89315,23 +89326,37 @@ function (_React$Component) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "days mb-1em"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-        id: this.state.day,
+        id: this.props.day,
         className: "day"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
         className: "day-text"
-      }, this.state.weekDayName, " - ", this.state.day, " "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      }, this.props.weekDayName, " - ", this.props.day, " "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
         className: "oi oi-plus",
         onClick: this.handleClick
       })), listItems, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
         className: "text-center total-day"
-      }, this.state.diff));
+      }, this.props.diff));
     }
   }]);
 
   return Day;
 }(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
 
-/* harmony default export */ __webpack_exports__["default"] = (Day);
+;
+
+function mapStateToProps(state, ownProps) {
+  var diffVal = state.day.diff ? state.day.diff : ownProps.diff;
+  return {
+    id: ownProps.id,
+    hours: ownProps.hours,
+    day: ownProps.day,
+    isCurrent: ownProps.isCurrent,
+    weekDayName: ownProps.weekDayName,
+    diff: diffVal
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps)(Day));
 
 /***/ }),
 
@@ -89719,7 +89744,9 @@ function mapStateToProps(state) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Week__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Week */ "./resources/js/components/Week.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _actions_entry__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../actions/entry */ "./resources/js/actions/entry.js");
+/* harmony import */ var _Week__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Week */ "./resources/js/components/Week.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -89741,47 +89768,35 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
+
 var SignInList =
 /*#__PURE__*/
 function (_React$Component) {
   _inherits(SignInList, _React$Component);
 
   function SignInList() {
-    var _this;
-
     _classCallCheck(this, SignInList);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(SignInList).call(this));
-    _this.state = {
-      weeks: []
-    };
-    return _this;
+    return _possibleConstructorReturn(this, _getPrototypeOf(SignInList).call(this));
   }
 
   _createClass(SignInList, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      var _this2 = this;
-
-      axios.get("api/history").then(function (response) {
-        _this2.setState({
-          weeks: Object.values(response.data.weeks)
-        });
-      })["catch"](function (error) {
-        console.log('error', error); //dispatch({type: "FETCH_USERS_REJECTED", payload: error});
-      });
+      this.props.dispatch(Object(_actions_entry__WEBPACK_IMPORTED_MODULE_2__["fetchWeeks"])());
     }
   }, {
     key: "render",
     value: function render() {
-      var listItems = this.state.weeks.map(function (week, index) {
+      var listItems = this.props && this.props.weeks ? this.props.weeks.map(function (week, index) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           key: index
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Week__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Week__WEBPACK_IMPORTED_MODULE_3__["default"], {
           days: week.days,
           diff: week.diffTotal
         }));
-      });
+      }) : '';
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         id: "days-container"
       }, listItems);
@@ -89791,7 +89806,13 @@ function (_React$Component) {
   return SignInList;
 }(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
 
-/* harmony default export */ __webpack_exports__["default"] = (SignInList);
+function mapStateToProps(state) {
+  return {
+    weeks: state.week.weeks
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps)(SignInList));
 
 /***/ }),
 
@@ -90124,7 +90145,9 @@ function mapStateToProps(state) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Day__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Day */ "./resources/js/components/Day.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _actions_entry__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../actions/entry */ "./resources/js/actions/entry.js");
+/* harmony import */ var _Day__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Day */ "./resources/js/components/Day.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -90146,6 +90169,8 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
+
 var Week =
 /*#__PURE__*/
 function (_React$Component) {
@@ -90157,7 +90182,6 @@ function (_React$Component) {
     _classCallCheck(this, Week);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Week).call(this, props));
-    _this.state = props;
     _this.updateWeekTotal = _this.updateWeekTotal.bind(_assertThisInitialized(_this));
     return _this;
   }
@@ -90168,27 +90192,18 @@ function (_React$Component) {
   }, {
     key: "updateWeekTotal",
     value: function updateWeekTotal(day_id) {
-      var _this2 = this;
-
-      axios.get("api/week-hours/" + day_id).then(function (response) {
-        _this2.setState({
-          weeks: _this2.state.weeks,
-          diff: response.data.diff
-        });
-      })["catch"](function (error) {
-        console.log('error', error); //dispatch({type: "FETCH_USERS_REJECTED", payload: error});
-      });
+      this.props.dispatch(Object(_actions_entry__WEBPACK_IMPORTED_MODULE_2__["fetchWeekHours"])(day_id));
     }
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this2 = this;
 
-      var listItems = this.state.days.map(function (day) {
+      var listItems = this.props && this.props.days ? this.props.days.map(function (day, index) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          key: day.id
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Day__WEBPACK_IMPORTED_MODULE_1__["default"], {
-          updateWeekTotal: _this3.updateWeekTotal,
+          key: index
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Day__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          updateWeekTotal: _this2.updateWeekTotal,
           diff: day.diff,
           weekDayName: day.weekDayName,
           day: day.date,
@@ -90196,19 +90211,33 @@ function (_React$Component) {
           hours: day.inputs,
           isCurrent: day.isCurrent
         }));
-      });
+      }) : [];
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("fieldset", null, listItems, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "text-center"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
         className: "total-week"
-      }, this.state.diff)));
+      }, this.props.diff)));
     }
   }]);
 
   return Week;
 }(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
 
-/* harmony default export */ __webpack_exports__["default"] = (Week);
+function mapStateToProps(state, ownProps) {
+  if (state.weekHour.diff) {
+    return {
+      diff: state.weekHour.diff,
+      days: ownProps.days
+    };
+  }
+
+  return {
+    diff: ownProps.diff,
+    days: ownProps.days
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps)(Week));
 
 /***/ }),
 
@@ -90216,7 +90245,7 @@ function (_React$Component) {
 /*!************************************************!*\
   !*** ./resources/js/constants/action-types.js ***!
   \************************************************/
-/*! exports provided: ADD_ARTICLE, FETCH_USERS_FULFILLED, FETCH_USERS_REJECTED, FETCH_USER_REJECTED, FETCH_USER_FULFILLED, FETCH_USER_LOGGED, FETCH_CURRENT_DAY, FETCH_CURRENT_FULFILLED, FETCH_LOGIN_IN_FULFILLED, FETCH_LOGIN_OUT_FULFILLED, UPDATED_HOUR */
+/*! exports provided: ADD_ARTICLE, FETCH_USERS_FULFILLED, FETCH_USERS_REJECTED, FETCH_USER_REJECTED, FETCH_USER_FULFILLED, FETCH_USER_LOGGED, FETCH_CURRENT_DAY, FETCH_CURRENT_FULFILLED, FETCH_LOGIN_IN_FULFILLED, FETCH_LOGIN_OUT_FULFILLED, FETCH_WEEKS_FULFILLED, FETCH_WEEK_HOURS_FULFILLED, FETCH_DAY_HORS_FULFILLED, ADD_HOUR, UPDATED_HOUR */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -90231,6 +90260,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_CURRENT_FULFILLED", function() { return FETCH_CURRENT_FULFILLED; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_LOGIN_IN_FULFILLED", function() { return FETCH_LOGIN_IN_FULFILLED; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_LOGIN_OUT_FULFILLED", function() { return FETCH_LOGIN_OUT_FULFILLED; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_WEEKS_FULFILLED", function() { return FETCH_WEEKS_FULFILLED; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_WEEK_HOURS_FULFILLED", function() { return FETCH_WEEK_HOURS_FULFILLED; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_DAY_HORS_FULFILLED", function() { return FETCH_DAY_HORS_FULFILLED; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ADD_HOUR", function() { return ADD_HOUR; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UPDATED_HOUR", function() { return UPDATED_HOUR; });
 var ADD_ARTICLE = "ADD_ARTICLE";
 var FETCH_USERS_FULFILLED = "FETCH_USERS_FULFILLED";
@@ -90242,7 +90275,54 @@ var FETCH_CURRENT_DAY = "FETCH_CURRENT_DAY";
 var FETCH_CURRENT_FULFILLED = "FETCH_CURRENT_FULFILLED";
 var FETCH_LOGIN_IN_FULFILLED = "FETCH_LOGIN_IN_FULFILLED";
 var FETCH_LOGIN_OUT_FULFILLED = "FETCH_LOGIN_OUT_FULFILLED";
+var FETCH_WEEKS_FULFILLED = "FETCH_WEEKS_FULFILLED";
+var FETCH_WEEK_HOURS_FULFILLED = "FETCH_WEEK_HOURS_FULFILLED";
+var FETCH_DAY_HORS_FULFILLED = "FETCH_DAY_HORS_FULFILLED ";
+var ADD_HOUR = "ADD_HOUR";
 var UPDATED_HOUR = "UPDATED_HOUR";
+
+/***/ }),
+
+/***/ "./resources/js/reducers/DayReducer.js":
+/*!*********************************************!*\
+  !*** ./resources/js/reducers/DayReducer.js ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return reducer; });
+/* harmony import */ var _constants_action_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../constants/action-types */ "./resources/js/constants/action-types.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+function reducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
+    id: null,
+    hours: null,
+    day: null,
+    isCurrent: null,
+    weekDayName: null,
+    diff: null
+  };
+  var action = arguments.length > 1 ? arguments[1] : undefined;
+
+  switch (action.type) {
+    case _constants_action_types__WEBPACK_IMPORTED_MODULE_0__["FETCH_DAY_HORS_FULFILLED"]:
+      {
+        return _objectSpread({}, state, {
+          diff: action.payload.diff
+        });
+      }
+  }
+
+  return state;
+}
 
 /***/ }),
 
@@ -90397,6 +90477,83 @@ function reducer() {
 
 /***/ }),
 
+/***/ "./resources/js/reducers/WeekHoursReducer.js":
+/*!***************************************************!*\
+  !*** ./resources/js/reducers/WeekHoursReducer.js ***!
+  \***************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return reducer; });
+/* harmony import */ var _constants_action_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../constants/action-types */ "./resources/js/constants/action-types.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+function reducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
+    days: null,
+    diff: 0
+  };
+  var action = arguments.length > 1 ? arguments[1] : undefined;
+
+  switch (action.type) {
+    case _constants_action_types__WEBPACK_IMPORTED_MODULE_0__["FETCH_WEEK_HOURS_FULFILLED"]:
+      {
+        return _objectSpread({}, state, {
+          diff: action.payload.diff
+        });
+      }
+  }
+
+  return state;
+}
+
+/***/ }),
+
+/***/ "./resources/js/reducers/WeekReducer.js":
+/*!**********************************************!*\
+  !*** ./resources/js/reducers/WeekReducer.js ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return reducer; });
+/* harmony import */ var _constants_action_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../constants/action-types */ "./resources/js/constants/action-types.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+function reducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
+    weeks: null
+  };
+  var action = arguments.length > 1 ? arguments[1] : undefined;
+
+  switch (action.type) {
+    case _constants_action_types__WEBPACK_IMPORTED_MODULE_0__["FETCH_WEEKS_FULFILLED"]:
+      {
+        return _objectSpread({}, state, {
+          weeks: Object.values(action.payload.weeks)
+        });
+      }
+  }
+
+  return state;
+}
+
+/***/ }),
+
 /***/ "./resources/js/reducers/index.js":
 /*!****************************************!*\
   !*** ./resources/js/reducers/index.js ***!
@@ -90411,6 +90568,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UsersReducer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UsersReducer */ "./resources/js/reducers/UsersReducer.js");
 /* harmony import */ var _NavReducer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./NavReducer */ "./resources/js/reducers/NavReducer.js");
 /* harmony import */ var _EntryReducer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./EntryReducer */ "./resources/js/reducers/EntryReducer.js");
+/* harmony import */ var _WeekReducer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./WeekReducer */ "./resources/js/reducers/WeekReducer.js");
+/* harmony import */ var _WeekHoursReducer__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./WeekHoursReducer */ "./resources/js/reducers/WeekHoursReducer.js");
+/* harmony import */ var _DayReducer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./DayReducer */ "./resources/js/reducers/DayReducer.js");
+
+
+
 
 
 
@@ -90420,7 +90583,10 @@ __webpack_require__.r(__webpack_exports__);
   users: _UsersReducer__WEBPACK_IMPORTED_MODULE_2__["default"],
   nav: _NavReducer__WEBPACK_IMPORTED_MODULE_3__["default"],
   form: redux_form__WEBPACK_IMPORTED_MODULE_1__["reducer"],
-  entry: _EntryReducer__WEBPACK_IMPORTED_MODULE_4__["default"]
+  entry: _EntryReducer__WEBPACK_IMPORTED_MODULE_4__["default"],
+  week: _WeekReducer__WEBPACK_IMPORTED_MODULE_5__["default"],
+  weekHour: _WeekHoursReducer__WEBPACK_IMPORTED_MODULE_6__["default"],
+  day: _DayReducer__WEBPACK_IMPORTED_MODULE_7__["default"]
 }));
 
 /***/ }),

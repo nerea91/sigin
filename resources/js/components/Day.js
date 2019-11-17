@@ -1,26 +1,19 @@
 
 import React from "react";
 import Hour from "./Hour";
+import { connect } from "react-redux";
+import { fetchDayHours } from '../actions/entry';
 
 class Day extends React.Component{
     constructor(props){
         super(props);
 
-        const { id = '',
-            hours = [],
-            day = '',
-            isCurrent = false,
-            weekDayName = '',
-            updateWeekTotal = null,
-            diff = ''
-          } = props;
           this.handleClick = this.handleClick.bind(this);
           this.updateDayTotal = this.updateDayTotal.bind(this);
-          this.state = props;
     }
 
     componentDidMount(){
-        if(this.state.isCurrent) {
+        if(this.props.isCurrent) {
             const id = this.props.day;
             const yourElement = document.getElementById(id);
             const y = yourElement.getBoundingClientRect().top + window.pageYOffset;
@@ -30,23 +23,7 @@ class Day extends React.Component{
     }
 
     updateDayTotal(day_id){
-
-        axios.get("api/day-hours/"+day_id)
-        .then((response) => {
-           this.setState({
-                id: this.state.id,
-                hours: this.state.hours,
-                day: this.state.day,
-                isCurrent: this.state.isCurrent,
-                weekDayName: this.state.weekDayName,
-                diff: response.data.diff
-            });
-            
-        })
-        .catch((error) => {
-            console.log('error', error);
-            //dispatch({type: "FETCH_USERS_REJECTED", payload: error});
-        })
+        this.props.dispatch(fetchDayHours(day_id));
     }
 
 
@@ -65,7 +42,7 @@ class Day extends React.Component{
     }
 
     render() {
-        const listItems = this.state.hours.map((hour, index) =>
+        const listItems = this.props.hours.map((hour, index) =>
         
             <Hour updateDayTotal={this.updateDayTotal} updateWeekTotal={this.props.updateWeekTotal} key={index} entry_in={hour.entry_in} entry_out={hour.entry_out} day_id={this.props.id} id={hour.id} diff={hour.diff}/>
 
@@ -73,13 +50,26 @@ class Day extends React.Component{
 
         return (
             <div className="days mb-1em">
-                <span id={this.state.day} className="day" ><span className="day-text">{this.state.weekDayName} - {this.state.day} </span><span className="oi oi-plus" onClick={this.handleClick} ></span></span>
+                <span id={this.props.day} className="day" ><span className="day-text">{this.props.weekDayName} - {this.props.day} </span><span className="oi oi-plus" onClick={this.handleClick} ></span></span>
                 {listItems}
-                <span className="text-center total-day">{this.state.diff}</span>
+                <span className="text-center total-day">{this.props.diff}</span>
             </div>
         );
     }
     
 }
+;
+function mapStateToProps(state, ownProps) {
 
-export default Day;
+    let diffVal = state.day.diff ? state.day.diff : ownProps.diff;
+
+    return {
+        id: ownProps.id,
+        hours: ownProps.hours,
+        day: ownProps.day,
+        isCurrent: ownProps.isCurrent,
+        weekDayName: ownProps.weekDayName,
+        diff: diffVal
+    }
+}
+export default connect(mapStateToProps)(Day)
