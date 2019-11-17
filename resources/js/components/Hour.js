@@ -32,12 +32,11 @@ class Hour extends React.Component{
                 
             })
             .catch((error) => {
-                console.log('error', error);
+                //console.log('error', error);
                 //dispatch({type: "FETCH_USERS_REJECTED", payload: error});
             })
         }
-        console.log(event.target);
-        event.target.parentNode.remove();
+        event.target.parentNode.parentNode.remove();
     }
 
     handleChange(type, event) {
@@ -58,7 +57,7 @@ class Hour extends React.Component{
             
         })
         .catch((error) => {
-            console.log('error', error);
+            //console.log('error', error);
             //dispatch({type: "FETCH_USERS_REJECTED", payload: error});
         })
   

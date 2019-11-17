@@ -26,8 +26,8 @@ class Main extends React.Component{
             <div id="entry">
                 {  
                     this.props.fetchHasLogInHour &&  this.props.fetchHasLogOutHour || ! this.props.input ?
-                    <div><p>Fichar entrada</p><a href="login" onClick={(event) => this.handleClick('login', event)}><img src="img/login-xxl.png"/></a> </div> :
-                    <div><p>Fichar salida</p><a href="logout" onClick={(event) => this.handleClick('logout', event)}><img src="img/logout-xxl.png"/></a></div>
+                    <div><p className="log-in-out-text">Fichar entrada</p><a href="login" onClick={(event) => this.handleClick('login', event)}><img src="img/login-xxl.png"/></a> </div> :
+                    <div><p className="log-in-out-text">Fichar salida</p><a href="logout" onClick={(event) => this.handleClick('logout', event)}><img src="img/logout-xxl.png"/></a></div>
                 }
                 <div className="cat">
                 <Cat /*type="gif"*/ text="Get to work!" />
