@@ -89238,8 +89238,11 @@ function (_React$Component) {
         _props$weekDayName = props.weekDayName,
         weekDayName = _props$weekDayName === void 0 ? '' : _props$weekDayName,
         _props$updateWeekTota = props.updateWeekTotal,
-        updateWeekTotal = _props$updateWeekTota === void 0 ? null : _props$updateWeekTota;
+        updateWeekTotal = _props$updateWeekTota === void 0 ? null : _props$updateWeekTota,
+        _props$diff = props.diff,
+        diff = _props$diff === void 0 ? '' : _props$diff;
     _this.handleClick = _this.handleClick.bind(_assertThisInitialized(_this));
+    _this.updateDayTotal = _this.updateDayTotal.bind(_assertThisInitialized(_this));
     _this.state = props;
     return _this;
   }
@@ -89258,6 +89261,24 @@ function (_React$Component) {
       }
     }
   }, {
+    key: "updateDayTotal",
+    value: function updateDayTotal(day_id) {
+      var _this2 = this;
+
+      axios.get("api/day-hours/" + day_id).then(function (response) {
+        _this2.setState({
+          id: _this2.state.id,
+          hours: _this2.state.hours,
+          day: _this2.state.day,
+          isCurrent: _this2.state.isCurrent,
+          weekDayName: _this2.state.weekDayName,
+          diff: response.data.diff
+        });
+      })["catch"](function (error) {
+        console.log('error', error); //dispatch({type: "FETCH_USERS_REJECTED", payload: error});
+      });
+    }
+  }, {
     key: "handleClick",
     value: function handleClick() {
       //event.preventDefault();
@@ -89270,21 +89291,23 @@ function (_React$Component) {
         hours: this.state.hours,
         day: this.state.day,
         isCurrent: this.state.isCurrent,
-        weekDayName: this.state.weekDayName
+        weekDayName: this.state.weekDayName,
+        diff: this.state.diff
       });
     }
   }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
+      var _this3 = this;
 
       var listItems = this.state.hours.map(function (hour, index) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Hour__WEBPACK_IMPORTED_MODULE_1__["default"], {
-          updateWeekTotal: _this2.props.updateWeekTotal,
+          updateDayTotal: _this3.updateDayTotal,
+          updateWeekTotal: _this3.props.updateWeekTotal,
           key: index,
           entry_in: hour.entry_in,
           entry_out: hour.entry_out,
-          day_id: _this2.props.id,
+          day_id: _this3.props.id,
           id: hour.id,
           diff: hour.diff
         });
@@ -89299,7 +89322,9 @@ function (_React$Component) {
       }, this.state.weekDayName, " - ", this.state.day, " "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
         className: "oi oi-plus",
         onClick: this.handleClick
-      })), listItems);
+      })), listItems, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        className: "text-center total-day"
+      }, this.state.diff));
     }
   }]);
 
@@ -89353,6 +89378,7 @@ function (_React$Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Hour).call(this, props));
     _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
+    _this.remove = _this.remove.bind(_assertThisInitialized(_this));
     var _props$entry_in = props.entry_in,
         entry_in = _props$entry_in === void 0 ? '' : _props$entry_in,
         _props$entry_out = props.entry_out,
@@ -89364,7 +89390,9 @@ function (_React$Component) {
         _props$diff = props.diff,
         diff = _props$diff === void 0 ? '' : _props$diff,
         _props$updateWeekTota = props.updateWeekTotal,
-        updateWeekTotal = _props$updateWeekTota === void 0 ? null : _props$updateWeekTota;
+        updateWeekTotal = _props$updateWeekTota === void 0 ? null : _props$updateWeekTota,
+        _props$updateDayTotal = props.updateDayTotal,
+        updateDayTotal = _props$updateDayTotal === void 0 ? null : _props$updateDayTotal;
     _this.state = props;
     return _this;
   }
@@ -89373,9 +89401,27 @@ function (_React$Component) {
     key: "componentDidMount",
     value: function componentDidMount() {}
   }, {
+    key: "remove",
+    value: function remove(event) {
+      var _this2 = this;
+
+      if (this.state.id) {
+        axios["delete"]("api/hour/" + this.state.id).then(function (response) {
+          _this2.props.updateWeekTotal(_this2.props.day_id);
+
+          _this2.props.updateDayTotal(_this2.props.day_id);
+        })["catch"](function (error) {
+          console.log('error', error); //dispatch({type: "FETCH_USERS_REJECTED", payload: error});
+        });
+      }
+
+      console.log(event.target);
+      event.target.parentNode.remove();
+    }
+  }, {
     key: "handleChange",
     value: function handleChange(type, event) {
-      var _this2 = this;
+      var _this3 = this;
 
       //event.preventDefault();
       var url = this.state.id ? "api/hour/" + this.state.id : "api/hour";
@@ -89386,9 +89432,11 @@ function (_React$Component) {
         id: this.state.id
       };
       axios.post(url, data).then(function (response) {
-        _this2.setState(response.data.input);
+        _this3.setState(response.data.input);
 
-        _this2.props.updateWeekTotal(_this2.props.day_id);
+        _this3.props.updateWeekTotal(_this3.props.day_id);
+
+        _this3.props.updateDayTotal(_this3.props.day_id);
       })["catch"](function (error) {
         console.log('error', error); //dispatch({type: "FETCH_USERS_REJECTED", payload: error});
       }); //this.props.dispatch(updateHour($value, $type));
@@ -89396,7 +89444,7 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this4 = this;
 
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "hour mb-05em"
@@ -89408,7 +89456,7 @@ function (_React$Component) {
         defaultValue: this.state.entry_in,
         id: 'entry-in-' + this.state.id,
         onBlur: function onBlur(event) {
-          return _this3.handleChange('in', event);
+          return _this4.handleChange('in', event);
         }
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         className: "form-control",
@@ -89416,7 +89464,12 @@ function (_React$Component) {
         defaultValue: this.state.entry_out,
         id: 'entry-out-' + this.state.id,
         onBlur: function onBlur(event) {
-          return _this3.handleChange('out', event);
+          return _this4.handleChange('out', event);
+        }
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        className: "oi oi-delete",
+        onClick: function onClick(event) {
+          return _this4.remove(event);
         }
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
         className: "total-hours"
@@ -90117,7 +90170,6 @@ function (_React$Component) {
     value: function updateWeekTotal(day_id) {
       var _this2 = this;
 
-      console.log('weeeeek');
       axios.get("api/week-hours/" + day_id).then(function (response) {
         _this2.setState({
           weeks: _this2.state.weeks,
@@ -90137,6 +90189,7 @@ function (_React$Component) {
           key: day.id
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Day__WEBPACK_IMPORTED_MODULE_1__["default"], {
           updateWeekTotal: _this3.updateWeekTotal,
+          diff: day.diff,
           weekDayName: day.weekDayName,
           day: day.date,
           id: day.id,

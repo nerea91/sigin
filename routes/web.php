@@ -29,7 +29,9 @@ Route::group(['prefix' => 'api'], function() {
     Route::get('/history/{days?}', 'EntryController@history')->name('history');
     Route::post('/hour', 'EntryController@createHour')->name('create-hour');
     Route::post('/hour/{id}', 'EntryController@updateHour')->name('update-hour');
-    Route::get('/week-hours/{id}', 'EntryController@getHoursInWeek')->name('week-hour');
+    Route::get('/week-hours/{id}', 'EntryController@getHoursInWeek')->name('week-hours');
+    Route::get('/day-hours/{id}', 'EntryController@getHoursInDay')->name('day-hours');
+    Route::delete('/hour/{id}', 'EntryController@deleteHour')->name('hour-delete');
 });
 
 Route::get('/{path?}', function () {

@@ -11,9 +11,11 @@ class Day extends React.Component{
             day = '',
             isCurrent = false,
             weekDayName = '',
-            updateWeekTotal = null
+            updateWeekTotal = null,
+            diff = ''
           } = props;
           this.handleClick = this.handleClick.bind(this);
+          this.updateDayTotal = this.updateDayTotal.bind(this);
           this.state = props;
     }
 
@@ -27,6 +29,27 @@ class Day extends React.Component{
         }
     }
 
+    updateDayTotal(day_id){
+
+        axios.get("api/day-hours/"+day_id)
+        .then((response) => {
+           this.setState({
+                id: this.state.id,
+                hours: this.state.hours,
+                day: this.state.day,
+                isCurrent: this.state.isCurrent,
+                weekDayName: this.state.weekDayName,
+                diff: response.data.diff
+            });
+            
+        })
+        .catch((error) => {
+            console.log('error', error);
+            //dispatch({type: "FETCH_USERS_REJECTED", payload: error});
+        })
+    }
+
+
 
     handleClick() {
         //event.preventDefault();
@@ -36,14 +59,15 @@ class Day extends React.Component{
             hours: this.state.hours,
             day: this.state.day,
             isCurrent: this.state.isCurrent,
-            weekDayName: this.state.weekDayName
+            weekDayName: this.state.weekDayName,
+            diff: this.state.diff
         });   
     }
 
     render() {
         const listItems = this.state.hours.map((hour, index) =>
         
-            <Hour updateWeekTotal={this.props.updateWeekTotal} key={index} entry_in={hour.entry_in} entry_out={hour.entry_out} day_id={this.props.id} id={hour.id} diff={hour.diff}/>
+            <Hour updateDayTotal={this.updateDayTotal} updateWeekTotal={this.props.updateWeekTotal} key={index} entry_in={hour.entry_in} entry_out={hour.entry_out} day_id={this.props.id} id={hour.id} diff={hour.diff}/>
 
         );
 
@@ -51,6 +75,7 @@ class Day extends React.Component{
             <div className="days mb-1em">
                 <span id={this.state.day} className="day" ><span className="day-text">{this.state.weekDayName} - {this.state.day} </span><span className="oi oi-plus" onClick={this.handleClick} ></span></span>
                 {listItems}
+                <span className="text-center total-day">{this.state.diff}</span>
             </div>
         );
     }

@@ -14,7 +14,7 @@ class Week extends React.Component{
     }
 
     updateWeekTotal(day_id){
-        console.log('weeeeek');
+
         axios.get("api/week-hours/"+day_id)
         .then((response) => {
            this.setState({
@@ -32,7 +32,7 @@ class Week extends React.Component{
     render() {
         const listItems = this.state.days.map((day) =>
         <div key={day.id}>
-            <Day updateWeekTotal={this.updateWeekTotal} weekDayName={day.weekDayName} day={day.date} id={day.id} hours={day.inputs} isCurrent={day.isCurrent} />
+            <Day updateWeekTotal={this.updateWeekTotal} diff={day.diff} weekDayName={day.weekDayName} day={day.date} id={day.id} hours={day.inputs} isCurrent={day.isCurrent} />
         </div>
         );
 

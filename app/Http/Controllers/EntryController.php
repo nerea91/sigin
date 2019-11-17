@@ -16,7 +16,7 @@ class EntryController extends Controller
      */
     public function __construct()
     {
-        //$this->middleware('auth');
+        $this->middleware('auth');
     }
 
     /**
@@ -88,7 +88,7 @@ class EntryController extends Controller
                 $weeks[$since->weekOfYear]['days'] = [];
             }
                 
-
+            $totalHoursInDay = 0;
             if( ! in_array($day, $dates)) {
                 $dayEntity = Day::create(['date' => $day]);
                 $daysStored[$day] = [ 'id' => $dayEntity->getKey() ,'date' => $day, 'inputs' => [['id' => '', 'entry_in' => '', 'entry_out' => '', 'diff' => '', 'diffInSeconds' => 0]] ];
@@ -96,12 +96,16 @@ class EntryController extends Controller
                 foreach($daysStored[$day]['inputs'] as $key => $input) {
                     $in = Carbon::parse($input['entry_in']);
                     $daysStored[$day]['inputs'][$key]['diffInSeconds'] = $in->diffInSeconds($input['entry_out']);
+                    $totalHoursInDay += $daysStored[$day]['inputs'][$key]['diffInSeconds'];
                     list($hours, $minutes) = $this->getHoursAndMinutesPassedFromSeconds($daysStored[$day]['inputs'][$key]['diffInSeconds']);
                     $daysStored[$day]['inputs'][$key]['diff'] = sprintf('Has trabajado %s horas y %s minutos', $hours, $minutes);
                     
                 }
                     
             }
+
+            list($hours, $minutes) = $this->getHoursAndMinutesPassedFromSeconds($totalHoursInDay);
+            $daysStored[$day]['diff'] = sprintf('Total %s horas y %s minutos', $hours, $minutes);
 
             $daysStored[$day]['isCurrent'] = $day == $to ? true : false;
             $daysStored[$day]['weekDayName'] = Day::WEEKDAYS[$since->weekday()];
@@ -248,6 +252,28 @@ class EntryController extends Controller
     }
 
     /**
+     * Get hours in day
+     *
+     * @param int $day
+     * @return JsonResponse
+     */
+    public function getHoursInDay($id)
+    {
+        $totalInSeconds = 0;
+        $day = Day::find($id)->toArray();
+        foreach ($day['inputs'] as $input) {
+            if($input['entry_in'] and $input['entry_out']) {
+                $in = Carbon::parse($input['entry_in']);
+                $totalInSeconds += $in->diffInSeconds($input['entry_out']);
+            }
+        }
+
+        list($hours, $minutes) = $this->getHoursAndMinutesPassedFromSeconds($totalInSeconds);
+
+        return response()->json(['diff' => sprintf('Total %s horas y %s minutos', $hours, $minutes)]); 
+    }
+
+    /**
      * Get hours and minutes passed from $totalInSeconds
      *
      * @param Int $totalInSeconds
@@ -261,5 +287,20 @@ class EntryController extends Controller
         $hours = intval($totalInHours);
         $minutes = intval($totalInMinutes - ($hours*60));
         return [$hours, $minutes];
+    }
+
+
+    /**
+     * Delete hour
+     *
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function deleteHour($id)
+    {
+        $input = Input::find($id);
+        if($input)
+            $input->delete();
+        return response()->json();
     }
 }

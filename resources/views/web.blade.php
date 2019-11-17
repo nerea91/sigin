@@ -93,9 +93,17 @@
                 color: brown;
             }
 
+            .total-day{
+                color: mediumvioletred;
+            }
+
             .form-control{
                 width: auto;
                 display: inline;
+            }
+
+            .oi-delete{
+                color: red;
             }
         </style>
     </head>
