@@ -75,7 +75,9 @@ class EntryController extends Controller
         
         $daysStored = Day::whereBetween('date', [$since->toDateString(), $to])->whereHas('inputs', function($query){
             return $query->where('user_id', auth()->user()->getKey());
-        })->get()->keyBy('date')->toArray();
+        })->with(['inputs' => function($query){
+            $query->where('user_id', auth()->user()->getKey());
+       }])->get()->keyBy('date')->toArray();
 
         $dates = array_keys($daysStored);
         $weeks = [];
@@ -83,9 +85,9 @@ class EntryController extends Controller
         for($i = 0; $i <= $days;$i++) {
             $day = $since->toDateString();
 
-            if( ! isset($weeks[$since->weekOfYear])) {
-                $weeks[$since->weekOfYear] = [];
-                $weeks[$since->weekOfYear]['days'] = [];
+            if( ! isset($weeks[$since->year.'-'.$since->weekOfYear])) {
+                $weeks[$since->year.'-'.$since->weekOfYear] = [];
+                $weeks[$since->year.'-'.$since->weekOfYear]['days'] = [];
             }
                 
             $totalHoursInDay = 0;
@@ -109,11 +111,11 @@ class EntryController extends Controller
 
             $daysStored[$day]['isCurrent'] = $day == $to ? true : false;
             $daysStored[$day]['weekDayName'] = Day::WEEKDAYS[$since->weekday()];
-            $weeks[$since->weekOfYear]['days'][] = $daysStored[$day];
+            $weeks[$since->year.'-'.$since->weekOfYear]['days'][] = $daysStored[$day];
                 
             $since->addDay();
         }
-
+  
         $this->getHoursInWeeks($weeks);
         
         return response()->json(['weeks' => $weeks]);

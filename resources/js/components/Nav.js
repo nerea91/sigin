@@ -34,6 +34,8 @@ class Nav extends React.Component{
                                     </button>
                                     <div className="dropdown-menu">
                                     <a className="dropdown-item" href="/history">Fichajes</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a className="dropdown-item" href="/api/logout"><button className="btn btn-danger btn-sm btn-block">Logout</button></a>
                                     </div>
                                 </div>
                                 
